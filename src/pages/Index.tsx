@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -70,9 +71,9 @@ const Index = () => {
                   )}
                 </button>
                 
-                <button className="button-secondary w-full">
+                <Link to="/3d-render" className="button-secondary w-full block text-center">
                   View 3D Render
-                </button>
+                </Link>
               </div>
               
               <div className="glass-card-light p-4">
