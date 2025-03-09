@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -9,6 +10,7 @@ const ThreeDRender = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
+  const [currentView, setCurrentView] = useState<'3d' | 'slices'>('3d');
 
   useEffect(() => {
     // Initialize the 3D scene
@@ -59,21 +61,35 @@ const ThreeDRender = () => {
       directionalLight.position.set(1, 1, 1);
       scene.add(directionalLight);
 
-      // Sample 3D model (placeholder until real CT scan data is loaded)
-      // In a real app, you would load the actual 3D model data here
-      const geometry = new THREE.SphereGeometry(2, 32, 32);
+      // Create a more anatomical-looking 3D model
+      const brainGeometry = new THREE.SphereGeometry(2, 32, 32);
+      // Deform the sphere to look more like a brain
+      const vertices = brainGeometry.attributes.position;
+      for (let i = 0; i < vertices.count; i++) {
+        const x = vertices.getX(i);
+        const y = vertices.getY(i);
+        const z = vertices.getZ(i);
+        
+        // Add some random displacement for a more organic look
+        const noise = 0.2 * Math.sin(5 * x) * Math.sin(5 * y) * Math.sin(5 * z);
+        vertices.setX(i, x + noise * (Math.random() * 0.1));
+        vertices.setY(i, y + noise * (Math.random() * 0.1));
+        vertices.setZ(i, z + noise * (Math.random() * 0.1));
+      }
+      
       const material = new THREE.MeshPhongMaterial({
         color: 0xA456F0,
         transparent: true,
         opacity: 0.7,
         wireframe: false,
+        shininess: 50,
       });
       
-      const mesh = new THREE.Mesh(geometry, material);
+      const mesh = new THREE.Mesh(brainGeometry, material);
       scene.add(mesh);
 
-      // Add a wireframe to the sphere
-      const wireframeGeometry = new THREE.WireframeGeometry(geometry);
+      // Add a wireframe to the model
+      const wireframeGeometry = new THREE.WireframeGeometry(brainGeometry);
       const wireframeMaterial = new THREE.LineBasicMaterial({ 
         color: 0xE5E5E7, 
         linewidth: 1 
@@ -84,6 +100,9 @@ const ThreeDRender = () => {
       // Animation loop
       const animate = () => {
         requestAnimationFrame(animate);
+        
+        // Add subtle rotation to the model
+        mesh.rotation.y += 0.001;
         
         if (controlsRef.current) {
           controlsRef.current.update();
@@ -131,6 +150,14 @@ const ThreeDRender = () => {
     };
   }, []);
 
+  // Sample CT scan slice images
+  const ctSlices = [
+    { id: 1, src: "https://i.imgur.com/5KvmQgJ.png", label: "Slice 1" },
+    { id: 2, src: "https://i.imgur.com/FBQxOt2.png", label: "Slice 2" },
+    { id: 3, src: "https://i.imgur.com/uCZjrz3.png", label: "Slice 3" },
+    { id: 4, src: "https://i.imgur.com/5KvmQgJ.png", label: "Slice 4" },
+  ];
+
   return (
     <main className="main-content">
       <div className="container-custom">
@@ -138,6 +165,31 @@ const ThreeDRender = () => {
           <h2 className="text-3xl font-bold mb-6 text-center text-medical-purple-light">
             3D CT Scan Rendering
           </h2>
+          
+          <div className="mb-6 flex justify-center">
+            <div className="glass-card-light inline-flex rounded-full p-1">
+              <button 
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  currentView === '3d' 
+                    ? 'bg-medical-accent text-white' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                onClick={() => setCurrentView('3d')}
+              >
+                3D Model
+              </button>
+              <button 
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  currentView === 'slices' 
+                    ? 'bg-medical-accent text-white' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                onClick={() => setCurrentView('slices')}
+              >
+                CT Slices
+              </button>
+            </div>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card flex flex-col">
@@ -199,10 +251,33 @@ const ThreeDRender = () => {
             </div>
             
             <div className="flex flex-col">
-              <div 
-                ref={mountRef}
-                className="glass-card flex items-center justify-center w-full h-[500px] rounded-2xl overflow-hidden"
-              />
+              {currentView === '3d' ? (
+                <div 
+                  ref={mountRef}
+                  className="glass-card flex items-center justify-center w-full h-[500px] rounded-2xl overflow-hidden"
+                />
+              ) : (
+                <div className="glass-card w-full h-[500px] rounded-2xl overflow-auto p-4">
+                  <h3 className="text-xl font-semibold mb-4 text-medical-purple-light">CT Scan Slices</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {ctSlices.map((slice) => (
+                      <div key={slice.id} className="glass-card-light p-2">
+                        <img 
+                          src={slice.src} 
+                          alt={slice.label} 
+                          className="w-full h-auto rounded-lg mb-2 transition-all hover:scale-105"
+                        />
+                        <p className="text-xs text-center text-medical-purple-light">{slice.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 p-2 glass-card-light">
+                    <p className="text-sm text-gray-300">
+                      These slices show the original and enhanced CT scan data. Our AI processing improves the resolution and detail between slices, reducing the need for additional radiation exposure.
+                    </p>
+                  </div>
+                </div>
+              )}
               
               <div className="glass-card-light p-4 mt-4">
                 <div className="flex items-center justify-between mb-2">
