@@ -1,101 +1,337 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
+    --background: 260 30% 18%;
+    --foreground: 240 5% 96%;
+    
+    --card: 260 40% 10%;
+    --card-foreground: 240 5% 96%;
+    
+    --popover: 260 40% 10%;
+    --popover-foreground: 240 5% 96%;
+    
+    --primary: 260 60% 65%;
+    --primary-foreground: 240 5% 96%;
+    
+    --secondary: 260 30% 30%;
+    --secondary-foreground: 240 5% 96%;
+    
+    --muted: 260 30% 20%;
+    --muted-foreground: 240 5% 70%;
+    
+    --accent: 280 75% 60%;
+    --accent-foreground: 240 5% 96%;
+    
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 260 30% 25%;
+    --input: 260 30% 25%;
+    --ring: 260 60% 65%;
+    
+    --radius: 1rem;
+  }
+  
+  * {
+    @apply border-border selection:bg-medical-accent/20 selection:text-medical-accent;
+    box-sizing: border-box;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, hsl(260, 30%, 18%) 0%, hsl(270, 35%, 15%) 100%);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@layer components {
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .main-content {
+    @apply flex flex-col min-h-screen py-12;
+  }
+  
+  .glass-card {
+    @apply rounded-2xl p-6 transition-all shadow-lg;
+    background: rgba(40, 35, 60, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-card-light {
+    @apply rounded-2xl p-6 transition-all shadow-md;
+    background: rgba(70, 60, 100, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .neuralscan-container {
+    @apply w-full mx-auto max-w-6xl;
+    background: linear-gradient(180deg, rgba(26, 31, 44, 0.8) 0%, rgba(40, 35, 80, 0.9) 100%);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    padding: 40px;
+    position: relative;
+  }
+  
+  .neuralscan-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #8066CD, #A456F0, #F6DBF5);
+    z-index: 10;
+  }
+  
+  .ct-scan-section {
+    @apply flex flex-col md:flex-row gap-8 w-full justify-between mb-12;
+  }
+  
+  .upload-section {
+    @apply flex flex-col gap-4 w-full md:w-5/12;
+  }
+  
+  .process-section {
+    @apply flex flex-col gap-6 w-full md:w-6/12;
+  }
+  
+  .process-step {
+    @apply glass-card-light animate-fade-in flex flex-col items-center justify-center transition-all p-4;
+    animation-fill-mode: both;
+    animation-duration: 0.6s;
+  }
+  
+  .process-step:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  
+  .process-step:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  
+  .process-step:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+  
+  .process-step:nth-child(4) {
+    animation-delay: 0.7s;
+  }
+  
+  .process-arrow {
+    @apply text-medical-accent animate-process-arrow h-12 flex items-center justify-center;
+    font-size: 24px;
+  }
+  
+  .image-container {
+    @apply flex items-center justify-center gap-2 overflow-hidden;
+  }
+  
+  .ct-image {
+    @apply transition-all duration-300 ease-in-out hover:scale-105;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  
+  .button-primary {
+    @apply relative flex items-center justify-center px-6 py-3 rounded-full text-white font-medium transition-all duration-300 overflow-hidden;
+    background-image: linear-gradient(45deg, #7E69AB, #A456F0);
+    box-shadow: 0 4px 15px rgba(126, 105, 171, 0.3);
+  }
+  
+  .button-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(126, 105, 171, 0.5);
+  }
+  
+  .button-primary:hover::before {
+    left: 100%;
+  }
+  
+  .button-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(126, 105, 171, 0.3);
+  }
+  
+  .button-primary:focus {
+    @apply outline-none ring-2 ring-medical-accent ring-offset-2 ring-offset-medical-dark;
+  }
+  
+  .button-secondary {
+    @apply relative flex items-center justify-center px-6 py-3 rounded-full text-white font-medium transition-all duration-300 overflow-hidden;
+    background-color: rgba(90, 80, 120, 0.3);
+    border: 1px solid rgba(164, 86, 240, 0.3);
+    backdrop-filter: blur(5px);
+  }
+  
+  .button-secondary:hover {
+    background-color: rgba(90, 80, 120, 0.5);
+    border-color: rgba(164, 86, 240, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .button-secondary:active {
+    transform: translateY(0);
+  }
+  
+  .button-secondary:focus {
+    @apply outline-none ring-2 ring-medical-accent/50 ring-offset-2 ring-offset-medical-dark;
+  }
+  
+  .file-input-container {
+    @apply relative w-full;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  .file-input-label {
+    @apply button-primary w-full flex items-center justify-center cursor-pointer;
   }
+  
+  .file-input {
+    @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+  }
+  
+  .upload-title {
+    @apply text-2xl font-bold mb-8 text-center md:text-left text-medical-purple-light;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .neural-network {
+    @apply w-full max-w-sm mx-auto;
+  }
+  
+  .render-3d {
+    @apply w-full max-w-sm mx-auto;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+  }
+  
+  .loading-indicator {
+    @apply relative flex items-center justify-center w-16 h-16 mx-auto;
+  }
+  
+  .loading-indicator::before {
+    content: '';
+    @apply absolute inset-0 rounded-full animate-pulse-glow;
+    background: conic-gradient(transparent, #A456F0, transparent 30%);
+    animation: spin 1.5s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .tooltip {
+    @apply invisible absolute p-2 bg-medical-dark text-white text-xs rounded shadow-lg opacity-0 transition-all duration-300 z-10 -mt-10;
+    width: max-content;
+    max-width: 200px;
+  }
+  
+  .tooltip-container:hover .tooltip {
+    @apply visible opacity-100 -mt-12;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .neuralscan-container {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .ct-scan-section {
+    @apply flex-col;
+  }
+  
+  .upload-section, .process-section {
+    @apply w-full;
+  }
+  
+  .process-step {
+    padding: 12px;
+  }
+  
+  .ct-image {
+    max-height: 80px;
+  }
+}
+
+/* Animation for page load */
+.page-enter {
+  opacity: 0;
+}
+
+.page-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+/* Specific animations for each process step */
+@keyframes highlight-scan {
+  0% { box-shadow: 0 0 0 0 rgba(164, 86, 240, 0); }
+  50% { box-shadow: 0 0 20px 5px rgba(164, 86, 240, 0.5); }
+  100% { box-shadow: 0 0 0 0 rgba(164, 86, 240, 0); }
+}
+
+.highlight-animation {
+  animation: highlight-scan 2s infinite;
+}
+
+/* Progress indicator */
+.progress-ring {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
