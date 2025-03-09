@@ -1,8 +1,7 @@
-
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const ThreeDRender = () => {
   const mountRef = useRef<HTMLDivElement>(null);
